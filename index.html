@@ -1,0 +1,666 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Creator | Video Portfolio</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+            color: #fff;
+            overflow-x: hidden;
+        }
+
+        .header {
+            text-align: center;
+            padding: 80px 20px 60px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at 50% 50%, rgba(138, 43, 226, 0.15), transparent 70%);
+            animation: pulse 4s ease-in-out infinite;
+            z-index: -1;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 0.5; transform: scale(1); }
+            50% { opacity: 0.8; transform: scale(1.05); }
+        }
+
+        h1 {
+            font-size: 3.5em;
+            font-weight: 700;
+            background: linear-gradient(45deg, #667eea, #764ba2, #f093fb);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 15px;
+            animation: fadeInDown 1s ease-out;
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .subtitle {
+            font-size: 1.3em;
+            color: #b8b8d1;
+            margin-bottom: 10px;
+            animation: fadeInUp 1s ease-out 0.2s both;
+        }
+
+        .tools {
+            font-size: 0.95em;
+            color: #8b8ba7;
+            margin-top: 15px;
+            animation: fadeInUp 1s ease-out 0.4s both;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 40px;
+            padding: 40px 20px;
+        }
+
+        .video-card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            overflow: hidden;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer;
+            position: relative;
+            animation: fadeInScale 0.6s ease-out backwards;
+        }
+
+        .video-card:nth-child(1) { animation-delay: 0.1s; }
+        .video-card:nth-child(2) { animation-delay: 0.2s; }
+        .video-card:nth-child(3) { animation-delay: 0.3s; }
+        .video-card:nth-child(4) { animation-delay: 0.4s; }
+        .video-card:nth-child(5) { animation-delay: 0.5s; }
+        .video-card:nth-child(6) { animation-delay: 0.6s; }
+        .video-card:nth-child(7) { animation-delay: 0.7s; }
+        .video-card:nth-child(8) { animation-delay: 0.8s; }
+        .video-card:nth-child(9) { animation-delay: 0.9s; }
+
+        @keyframes fadeInScale {
+            from {
+                opacity: 0;
+                transform: scale(0.9);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .video-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 60px rgba(138, 43, 226, 0.4);
+            border-color: rgba(138, 43, 226, 0.5);
+        }
+
+        .video-thumbnail {
+            position: relative;
+            padding-bottom: 56.25%;
+            height: 0;
+            overflow: hidden;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+        .video-thumbnail img {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            filter: blur(8px);
+            transform: scale(1.1);
+            transition: all 0.4s ease;
+        }
+
+        .video-card:hover .video-thumbnail img {
+            filter: blur(4px);
+            transform: scale(1.15);
+        }
+
+        .play-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.4);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .video-card:hover .play-overlay {
+            background: rgba(0, 0, 0, 0.6);
+        }
+
+        .play-button {
+            width: 80px;
+            height: 80px;
+            background: rgba(138, 43, 226, 0.95);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transform: scale(1);
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 30px rgba(138, 43, 226, 0.5);
+        }
+
+        .video-card:hover .play-button {
+            transform: scale(1.15);
+            background: rgba(138, 43, 226, 1);
+        }
+
+        .play-button::after {
+            content: '';
+            width: 0;
+            height: 0;
+            border-left: 25px solid #fff;
+            border-top: 15px solid transparent;
+            border-bottom: 15px solid transparent;
+            margin-left: 5px;
+        }
+
+        .video-info {
+            padding: 25px;
+            background: rgba(0, 0, 0, 0.3);
+        }
+
+        .video-number {
+            font-size: 0.85em;
+            color: #a78bfa;
+            font-weight: 600;
+            letter-spacing: 1px;
+            margin-bottom: 8px;
+        }
+
+        .video-title {
+            font-size: 1.3em;
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: #fff;
+        }
+
+        .video-description {
+            font-size: 0.95em;
+            color: #b8b8d1;
+            line-height: 1.6;
+        }
+
+        .footer {
+            text-align: center;
+            padding: 60px 20px 40px;
+            color: #8b8ba7;
+            font-size: 0.95em;
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2.5em;
+            }
+
+            .subtitle {
+                font-size: 1.1em;
+            }
+
+            .gallery {
+                grid-template-columns: 1fr;
+                gap: 30px;
+            }
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 2000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.97);
+            animation: fadeIn 0.3s ease;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .modal-content {
+            position: relative;
+            width: 90%;
+            max-width: 1200px;
+            animation: slideIn 0.4s ease;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: scale(0.9) translateY(30px);
+                opacity: 0;
+            }
+            to {
+                transform: scale(1) translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .video-container {
+            position: relative;
+            width: 100%;
+            background: #000;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 25px 100px rgba(138, 43, 226, 0.4);
+        }
+
+        .video-container iframe {
+            width: 100%;
+            height: 70vh;
+            border: none;
+            display: block;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 0;
+            margin-bottom: 20px;
+        }
+
+        .modal-title {
+            font-size: 1.5em;
+            color: #fff;
+            font-weight: 600;
+        }
+
+        .close-btn {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: #fff;
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            font-size: 24px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(10px);
+        }
+
+        .close-btn:hover {
+            background: rgba(138, 43, 226, 0.8);
+            transform: rotate(90deg);
+            border-color: rgba(138, 43, 226, 1);
+        }
+
+        .video-controls {
+            background: rgba(15, 12, 41, 0.95);
+            padding: 20px;
+            border-radius: 0 0 12px 12px;
+            backdrop-filter: blur(20px);
+        }
+
+        .control-row {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .control-btn {
+            background: rgba(138, 43, 226, 0.2);
+            border: 1px solid rgba(138, 43, 226, 0.4);
+            color: #fff;
+            padding: 12px 24px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .control-btn:hover {
+            background: rgba(138, 43, 226, 0.8);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(138, 43, 226, 0.4);
+        }
+
+        .control-btn.active {
+            background: rgba(138, 43, 226, 0.9);
+            border-color: rgba(138, 43, 226, 1);
+        }
+
+        .hint-text {
+            text-align: center;
+            color: #8b8ba7;
+            font-size: 0.9em;
+            margin-top: 15px;
+        }
+
+        @media (max-width: 768px) {
+            .video-container iframe {
+                height: 50vh;
+            }
+
+            .modal-content {
+                width: 95%;
+            }
+
+            .modal-header {
+                padding: 15px 0;
+            }
+
+            .modal-title {
+                font-size: 1.2em;
+            }
+
+            .control-btn {
+                padding: 10px 18px;
+                font-size: 13px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>POSEIDONOR</h1>
+        <div class="subtitle">AI Creator • Видео портфолио</div>
+        <div class="tools">Pika • Veo 3 • Kling • ElevenLabs • Nano Banano • Midjourney</div>
+        <div class="tools" style="margin-top: 15px; font-size: 0.85em; color: #8b8ba7;">Марк Черкасов</div>
+        <div class="tools" style="margin-top: 25px; font-size: 1em; color: #a78bfa;">Избранные работы</div>
+    </div>
+
+    <div class="container">
+        <div class="gallery">
+            <div class="video-card" onclick="openVideo(0, 'Реклама Charisma Golf')">
+                <div class="video-thumbnail">
+                    <img src="https://drive.google.com/thumbnail?id=1JJpRK7MiREVmRzWlr026huMEXKwJ4Q6x&sz=w1000" alt="Charisma Golf">
+                    <div class="play-overlay">
+                        <div class="play-button"></div>
+                    </div>
+                </div>
+                <div class="video-info">
+                    <div class="video-number">КОММЕРЧЕСКИЙ ЗАКАЗ</div>
+                    <div class="video-title">Реклама Charisma Golf</div>
+                    <div class="video-description">Рекламный ролик</div>
+                </div>
+            </div>
+
+            <div class="video-card" onclick="openVideo(1, 'Born to be')">
+                <div class="video-thumbnail">
+                    <img src="https://drive.google.com/thumbnail?id=10xY07_EKnV-TL48yTsrYuvvDZ8EA3oCA&sz=w1000" alt="Born to be">
+                    <div class="play-overlay">
+                        <div class="play-button"></div>
+                    </div>
+                </div>
+                <div class="video-info">
+                    <div class="video-number">ТВОРЧЕСКИЙ ПРОЕКТ</div>
+                    <div class="video-title">Born to be</div>
+                    <div class="video-description">Атмосферное видео</div>
+                </div>
+            </div>
+
+            <div class="video-card" onclick="openVideo(2, 'Мини анимация магический шар')">
+                <div class="video-thumbnail">
+                    <img src="https://drive.google.com/thumbnail?id=1RntAMK-NStxZxRSQopQnUgFU5Fv0pTTO&sz=w1000" alt="Магический шар">
+                    <div class="play-overlay">
+                        <div class="play-button"></div>
+                    </div>
+                </div>
+                <div class="video-info">
+                    <div class="video-number">АВТОРСКАЯ РАБОТА</div>
+                    <div class="video-title">Мини анимация магический шар</div>
+                    <div class="video-description">Магия и анимация</div>
+                </div>
+            </div>
+
+            <div class="video-card" onclick="openVideo(3, 'Видео по референсам лиц')">
+                <div class="video-thumbnail">
+                    <img src="https://drive.google.com/thumbnail?id=1yfAmYLxBp3eDBqibt47rmor0ALgEvHSb&sz=w1000" alt="Видео по референсам">
+                    <div class="play-overlay">
+                        <div class="play-button"></div>
+                    </div>
+                </div>
+                <div class="video-info">
+                    <div class="video-number">КОММЕРЧЕСКИЙ ЗАКАЗ</div>
+                    <div class="video-title">Видео по референсам лиц</div>
+                    <div class="video-description">Рекламный ролик</div>
+                </div>
+            </div>
+
+            <div class="video-card" onclick="openVideo(4, 'Реклама Pro Garant')">
+                <div class="video-thumbnail">
+                    <img src="https://drive.google.com/thumbnail?id=1FOKigR8QKNAlbInDDSuLvjw3XFhmrByr&sz=w1000" alt="Pro Garant">
+                    <div class="play-overlay">
+                        <div class="play-button"></div>
+                    </div>
+                </div>
+                <div class="video-info">
+                    <div class="video-number">КОММЕРЧЕСКИЙ ЗАКАЗ</div>
+                    <div class="video-title">Реклама Pro Garant</div>
+                    <div class="video-description">Рекламный ролик</div>
+                </div>
+            </div>
+
+            <div class="video-card" onclick="openVideo(5, 'Судьбоносная встреча')">
+                <div class="video-thumbnail">
+                    <img src="https://drive.google.com/thumbnail?id=1UYlp5vtiWGDn1ZGDnHj-jmHAwGLOmvFU&sz=w1000" alt="Судьбоносная встреча">
+                    <div class="play-overlay">
+                        <div class="play-button"></div>
+                    </div>
+                </div>
+                <div class="video-info">
+                    <div class="video-number">КОММЕРЧЕСКИЙ ЗАКАЗ</div>
+                    <div class="video-title">Судьбоносная встреча</div>
+                    <div class="video-description">Эмоциональная история</div>
+                </div>
+            </div>
+
+            <div class="video-card" onclick="openVideo(6, 'Начало Руси')">
+                <div class="video-thumbnail">
+                    <img src="https://drive.google.com/thumbnail?id=18ZKnuP_qY5LlOlNtEPHzRwwGbdeFM1_D&sz=w1000" alt="Начало Руси">
+                    <div class="play-overlay">
+                        <div class="play-button"></div>
+                    </div>
+                </div>
+                <div class="video-info">
+                    <div class="video-number">КОММЕРЧЕСКИЙ ЗАКАЗ</div>
+                    <div class="video-title">Начало Руси</div>
+                    <div class="video-description">Исторический контент</div>
+                </div>
+            </div>
+
+            <div class="video-card" onclick="openVideo(7, 'Ролик в стиле Гибли')">
+                <div class="video-thumbnail">
+                    <img src="https://drive.google.com/thumbnail?id=1xeIvfnM1dFYXGtKf8wj2HfputVBe2GJs&sz=w1000" alt="Стиль Гибли">
+                    <div class="play-overlay">
+                        <div class="play-button"></div>
+                    </div>
+                </div>
+                <div class="video-info">
+                    <div class="video-number">КОММЕРЧЕСКИЙ ЗАКАЗ</div>
+                    <div class="video-title">Ролик в стиле Гибли</div>
+                    <div class="video-description">Для соцсетей</div>
+                </div>
+            </div>
+
+            <div class="video-card" onclick="openVideo(8, 'Реклама gate.cx')">
+                <div class="video-thumbnail">
+                    <img src="https://drive.google.com/thumbnail?id=1YjjqLtt6VPuORQUA0uVvNccHfCr493xi&sz=w1000" alt="gate.cx">
+                    <div class="play-overlay">
+                        <div class="play-button"></div>
+                    </div>
+                </div>
+                <div class="video-info">
+                    <div class="video-number">КОММЕРЧЕСКИЙ ЗАКАЗ</div>
+                    <div class="video-title">Реклама gate.cx</div>
+                    <div class="video-description">Рекламный ролик</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="footer">
+        <p>© 2024 POSEIDONOR | AI Creator Portfolio</p>
+        <p style="margin-top: 10px; font-size: 0.9em; color: #6b6b8a;">Это избранные работы из моего портфолио</p>
+    </div>
+
+    <div id="modal" class="modal" onclick="closeVideo()">
+        <div class="modal-content" onclick="event.stopPropagation()">
+            <div class="modal-header">
+                <div class="modal-title" id="modalTitle">ПРОЕКТ 01</div>
+                <button class="close-btn" onclick="closeVideo()">✕</button>
+            </div>
+            <div class="video-container">
+                <iframe id="videoPlayer" src="" allow="autoplay; fullscreen"></iframe>
+            </div>
+            <div class="video-controls">
+                <div class="control-row">
+                    <button class="control-btn" onclick="openInNewTab()">
+                        🔗 Открыть в Google Drive
+                    </button>
+                    <button class="control-btn" onclick="requestFullscreen()">
+                        ⛶ Полный экран
+                    </button>
+                </div>
+                <div class="hint-text">
+                    💡 Используйте элементы управления видео для паузы, звука и качества
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const videos = [
+            'https://drive.google.com/file/d/1JJpRK7MiREVmRzWlr026huMEXKwJ4Q6x/preview',
+            'https://drive.google.com/file/d/10xY07_EKnV-TL48yTsrYuvvDZ8EA3oCA/preview',
+            'https://drive.google.com/file/d/1RntAMK-NStxZxRSQopQnUgFU5Fv0pTTO/preview',
+            'https://drive.google.com/file/d/1yfAmYLxBp3eDBqibt47rmor0ALgEvHSb/preview',
+            'https://drive.google.com/file/d/1FOKigR8QKNAlbInDDSuLvjw3XFhmrByr/preview',
+            'https://drive.google.com/file/d/1UYlp5vtiWGDn1ZGDnHj-jmHAwGLOmvFU/preview',
+            'https://drive.google.com/file/d/18ZKnuP_qY5LlOlNtEPHzRwwGbdeFM1_D/preview',
+            'https://drive.google.com/file/d/1xeIvfnM1dFYXGtKf8wj2HfputVBe2GJs/preview',
+            'https://drive.google.com/file/d/1YjjqLtt6VPuORQUA0uVvNccHfCr493xi/preview'
+        ];
+
+        const videoLinks = [
+            'https://drive.google.com/file/d/1JJpRK7MiREVmRzWlr026huMEXKwJ4Q6x/view',
+            'https://drive.google.com/file/d/10xY07_EKnV-TL48yTsrYuvvDZ8EA3oCA/view',
+            'https://drive.google.com/file/d/1RntAMK-NStxZxRSQopQnUgFU5Fv0pTTO/view',
+            'https://drive.google.com/file/d/1yfAmYLxBp3eDBqibt47rmor0ALgEvHSb/view',
+            'https://drive.google.com/file/d/1FOKigR8QKNAlbInDDSuLvjw3XFhmrByr/view',
+            'https://drive.google.com/file/d/1UYlp5vtiWGDn1ZGDnHj-jmHAwGLOmvFU/view',
+            'https://drive.google.com/file/d/18ZKnuP_qY5LlOlNtEPHzRwwGbdeFM1_D/view',
+            'https://drive.google.com/file/d/1xeIvfnM1dFYXGtKf8wj2HfputVBe2GJs/view',
+            'https://drive.google.com/file/d/1YjjqLtt6VPuORQUA0uVvNccHfCr493xi/view'
+        ];
+
+        let currentVideoIndex = 0;
+
+        function openVideo(index, title) {
+            currentVideoIndex = index;
+            const modal = document.getElementById('modal');
+            const player = document.getElementById('videoPlayer');
+            const modalTitle = document.getElementById('modalTitle');
+            
+            player.src = videos[index];
+            modalTitle.textContent = title;
+            modal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeVideo() {
+            const modal = document.getElementById('modal');
+            const player = document.getElementById('videoPlayer');
+            
+            modal.classList.remove('active');
+            player.src = '';
+            document.body.style.overflow = 'auto';
+        }
+
+        function openInNewTab() {
+            window.open(videoLinks[currentVideoIndex], '_blank');
+        }
+
+        function requestFullscreen() {
+            const player = document.getElementById('videoPlayer');
+            if (player.requestFullscreen) {
+                player.requestFullscreen();
+            } else if (player.webkitRequestFullscreen) {
+                player.webkitRequestFullscreen();
+            } else if (player.msRequestFullscreen) {
+                player.msRequestFullscreen();
+            }
+        }
+
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeVideo();
+            }
+        });
+    </script>
+</body>
+</html>
